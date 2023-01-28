@@ -15,7 +15,6 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="7.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="DTOs\" />
     <Folder Include="Helper\" />
   </ItemGroup>
