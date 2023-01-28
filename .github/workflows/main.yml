@@ -35,6 +35,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y dotnet-sdk-6.0
 
+    - name: Restore packages
+      run: |
+        dotnet restore
+
     - name: Build and publish application
       run: |
         dotnet build -c Release
