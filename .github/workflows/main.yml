@@ -1,1 +1,47 @@
+name: Deploy to AWS Lambda and API Gateway
 
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Build
+      run: dotnet build FixxAPI/FixxAPI.csproj
+
+    - name: Test
+      run: dotnet test FixxAPI.Tests/FixxAPI.Tests.csproj
+
+    - name: Package
+      run: dotnet lambda package --project-location FixxAPI/FixxAPI.csproj --output-package FixxAPI.zip
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Retrieve REST API Gateway configuration
+      run: aws apigateway get-rest-api --rest-api-id qdw2azkax8 --query '{body:body}' > api-gateway-body.json
+
+    - name: Deploy to S3
+      run: aws s3 cp FixxAPI.zip s3://fixxbucket/FixxAPI.zip
+
+    - name: Deploy to AWS Lambda
+      run: aws lambda update-function-code --function-name fixx-api-lambda --s3-bucket fixxbucket --s3-key FixxAPI.zip
+
+    - name: Deploy to API Gateway
+      run: aws apigateway update-rest-api --rest-api-id qdw2azkax8 --body file://api-gateway-body.json
