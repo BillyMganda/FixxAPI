@@ -11,12 +11,4 @@ namespace FixxAPI.Tests;
 public class ValuesControllerTests
 {
 
-
-    [Fact]
-    public async Task TestGet()
-    {
-        
-    }
-
-
 }
