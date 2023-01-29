@@ -41,7 +41,7 @@ jobs:
         dotnet lambda package --project-location FixxAPI.csproj --output-package FixxAPI.zip
 
     - name: Deploy to AWS
-      uses: aws-actions/upload-to-s3@v1
+      uses: aws-actions/amazon-s3-deployment@v1
       with:
         args: FixxAPI.zip
         bucket-name: fixxbucket
