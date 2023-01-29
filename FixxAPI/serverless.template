@@ -13,7 +13,7 @@
         "CodeUri": "",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
+        "Role": "arn:aws:iam::735745902141:role/billy-devrole",
         "Policies": [
           "AWSLambda_FullAccess"
         ],

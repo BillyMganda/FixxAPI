@@ -1,7 +1,6 @@
 ﻿using FixxAPI.DTOs;
 using FixxAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FixxAPI.Controllers

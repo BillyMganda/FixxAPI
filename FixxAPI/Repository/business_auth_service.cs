@@ -1,7 +1,5 @@
 ﻿using FixxAPI.DTOs;
 using FixxAPI.Helper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
