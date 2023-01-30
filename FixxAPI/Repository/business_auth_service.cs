@@ -166,5 +166,10 @@ namespace FixxAPI.Repository
             var result = await _context.users.FirstOrDefaultAsync(x => x.email == email);
             return result!;
         }
+
+        public async Task<IEnumerable<users>> get_all_users()
+        {
+            return await _context.users.ToListAsync();
+        }
     }
 }
