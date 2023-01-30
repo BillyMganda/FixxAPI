@@ -1,0 +1,36 @@
+﻿name: Deploy .NET to AWS Lambda
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+defaults:
+  run:
+    working-directory: ./Services
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env: 
+      working-directory: ./Services
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+    - name: AWS CLI
+      run: dotnet tool install -g Amazon.Lambda.Tools
+    - name: Restore dependencies
+      run: dotnet restore Services.sln
+    - name: Build
+      run: dotnet build --no-restore Services.sln
+    - name: Deploy to Lambda
+      working-directory: ./Services/ApiServices
+      run: dotnet lambda deploy-serverless
