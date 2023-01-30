@@ -13,6 +13,7 @@ namespace FixxAPI.Repository
         public void send_forgot_password_email(string email, string token);
         public string send_forgot_password_sms(string to_number, string token);
         public Task<users> save_user_business(user_add_dto dto);
-        public Task<users> get_user_by_email(string email);        
+        public Task<users> get_user_by_email(string email);
+        public Task<IEnumerable<users>> get_all_users();
     }
 }
