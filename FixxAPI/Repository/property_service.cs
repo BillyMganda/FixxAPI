@@ -1,4 +1,7 @@
-﻿using FixxAPI.DTOs;
+﻿using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
+using FixxAPI.DTOs;
 using FixxAPI.Helper;
 using FixxAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +60,175 @@ namespace FixxAPI.Repository
             };
 
             var prop_ = _context.properties.Add(property);
+            await _context.SaveChangesAsync();
+            return prop_.Entity;
+        }
+
+        public async Task UploadImagesToS3Bucket(List<MemoryStream> imageStreams)
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            string access_key = _configuration.GetSection("AWS_KEYS:ACCESS_KEY_ID").Value!;
+            string secret_key = _configuration.GetSection("AWS_KEYS:SECRET_ACCESS_KEY").Value!;
+            var credentials = new BasicAWSCredentials(access_key, secret_key);
+
+            var config = new AmazonS3Config()
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.USEast2
+            };
+
+            var s3Client = new AmazonS3Client(credentials, config);
+
+            string bucketName = "fixxbucket";
+            var folderName = user_id.ToString() + "/";
+
+            // Check if folder already exists
+            var listRequest = new ListObjectsRequest
+            {
+                BucketName = bucketName,
+                Prefix = folderName
+            };
+            var listResponse = await s3Client.ListObjectsAsync(listRequest);
+            if (listResponse.S3Objects.Count == 0)
+            {
+                // Create a "folder" by creating a "folder" object with a key name that ends with a "/"
+                var folderKey = folderName;
+                if (!folderKey.EndsWith("/"))
+                    folderKey += "/";
+                await s3Client.PutObjectAsync(new PutObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = folderKey,
+                    ContentBody = ""
+                });
+            }
+
+            // Upload images to the "folder"            
+            foreach (var imageStream in imageStreams)
+            {
+                var imagePath = Guid.NewGuid().ToString();
+                using (imageStream)
+                {
+                    var fileName = Path.GetFileName(imagePath);
+                    var key = folderName + fileName;
+                    await s3Client.PutObjectAsync(new PutObjectRequest
+                    {
+                        BucketName = bucketName,
+                        Key = key,
+                        InputStream = imageStream
+                    });
+                }
+            }
+        }
+
+        public async Task<List<S3Object>> GetImagesFromS3Bucket()
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            string access_key = _configuration.GetSection("AWS_KEYS:ACCESS_KEY_ID").Value!;
+            string secret_key = _configuration.GetSection("AWS_KEYS:SECRET_ACCESS_KEY").Value!;
+            var credentials = new BasicAWSCredentials(access_key, secret_key);
+
+            var config = new AmazonS3Config()
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.USEast2
+            };
+
+            var s3Client = new AmazonS3Client(credentials, config);
+            string bucketName = "fixxbucket";
+            string folderName = user_id.ToString() + "/";
+
+            var files = new List<S3Object>();
+
+            ListObjectsRequest listObjectsRequest = new ListObjectsRequest
+            {
+                BucketName = bucketName,
+                Prefix = folderName
+            };
+
+            ListObjectsResponse listObjectsResponse;
+
+            do
+            {
+                listObjectsResponse = await s3Client.ListObjectsAsync(listObjectsRequest);
+                files.AddRange(listObjectsResponse.S3Objects);
+
+            } while (listObjectsResponse.IsTruncated);
+
+            return files;
+        }
+
+        public async Task<amenities> get_amenities()
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            var amenity = await _context.amenities.FirstOrDefaultAsync(x => x.user_id == user_id);
+            return amenity!;
+        }
+
+        public async Task<amenities> add_ammenity(amenity_add_dto dto)
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            var amenity = new amenities
+            {
+                user_id = user_id,
+                cleaning_products = dto.cleaning_products,
+                shampoo = dto.shampoo,
+                hot_water = dto.hot_water,
+                shower_gel = dto.shower_gel,
+                essentials = dto.essentials,
+                hangers = dto.hangers,
+                bed_linen = dto.bed_linen,
+                extra_pillows_blankets = dto.extra_pillows_blankets,
+                room_darkening_shades = dto.room_darkening_shades,
+                iron = dto.iron,
+                drying_rack = dto.drying_rack,
+                mosquito_net = dto.mosquito_net,
+                clothing_storage = dto.clothing_storage,
+                ethernet_connection = dto.ethernet_connection,
+                tV_with_cable = dto.tV_with_cable,
+                security_cameras = dto.security_cameras,
+                smoke_alarm = dto.smoke_alarm,
+                carbon_monoxide_alarm = dto.carbon_monoxide_alarm,
+                fire_extinguisher = dto.fire_extinguisher,
+                first_aid_kit = dto.first_aid_kit,
+                wifi = dto.wifi,
+                dedicated_workspace = dto.dedicated_workspace,
+                kitchen = dto.kitchen,
+                refrigirator = dto.refrigirator,
+                microwave = dto.microwave,
+                cooking_basics = dto.cooking_basics,
+                freezer = dto.freezer,
+                electric_stove = dto.electric_stove,
+                oven = dto.oven,
+                hot_water_Kettle = dto.hot_water_Kettle,
+                coffee_maker = dto.coffee_maker,
+                wine_glasses = dto.wine_glasses,
+                toaster = dto.toaster,
+                coffee = dto.coffee,
+                private_entrance = dto.private_entrance,
+                laundromat_nearby = dto.laundromat_nearby,
+                private_balcony = dto.private_balcony,
+                outdoor_furniture = dto.outdoor_furniture,
+                free_parking = dto.free_parking,
+                building_staff = dto.building_staff,
+                self_check_in = dto.self_check_in,
+                washer = dto.washer,
+                air_conditioning = dto.air_conditioning,
+                hair_dryer = dto.hair_dryer,
+                heating = dto.heating,
+            };
+
+            var prop_ = _context.amenities.Add(amenity);
             await _context.SaveChangesAsync();
             return prop_.Entity;
         }
