@@ -22,7 +22,7 @@ namespace FixxAPI.DTOs
         public string zip_code { get; set; } = string.Empty;
         [Required, MinLength(6)]
         public string password { get; set; } = string.Empty;
-        [Required, MinLength(6), Compare("password")]
+        [Required, Compare("password")]
         public string confirm_password { get; set; } = string.Empty;
         [Required]
         public bool terms_agreed { get; set; } = true;

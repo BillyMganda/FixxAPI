@@ -6,9 +6,9 @@ namespace FixxAPI.DTOs
     {
         [Required]
         public string token { get; set; } = string.Empty;
-        [Required]
+        [Required, MinLength(6)]
         public string new_password { get; set; } = string.Empty;
-        [Required]
+        [Required, Compare("new_password")]
         public string confirm_new_password { get; set; } = string.Empty;
     }
 }

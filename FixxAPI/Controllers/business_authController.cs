@@ -93,7 +93,7 @@ namespace FixxAPI.Controllers
         public async Task<IActionResult> ForgotPasswordSMS(string phone)
         {
             try
-            {                
+            {
                 var user = await _repository.get_user_by_phone(phone);
                 if (user == null || user.forgot_password_token != "")
                 {
