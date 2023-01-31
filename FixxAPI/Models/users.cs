@@ -5,7 +5,7 @@ namespace FixxAPI.Models
     public class users
     {
         [Key]
-        public string uuid { get; set; } = Guid.NewGuid().ToString();
+        public Guid uuid { get; set; }
         public string first_name { get; set; } = string.Empty;
         public string last_name { get; set; } = string.Empty;
         public string phone_number { get; set; } = string.Empty;

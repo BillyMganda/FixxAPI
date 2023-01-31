@@ -1,6 +1,7 @@
 using FixxAPI.Helper;
 using FixxAPI.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -63,6 +64,7 @@ public class Startup
             });
             options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "Fixx247 API", Version = "v1" });
+            options.ResolveConflictingActions(ApiDescriptions => ApiDescriptions.First());
         });
     }
 
@@ -82,9 +84,10 @@ public class Startup
         app.UseAuthentication();
         app.UseCors();
         app.UseSwagger();
+        app.UseDeveloperExceptionPage();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fixx247 API V1");
+            c.SwaggerEndpoint("./v1/swagger.json", "Fixx247 API V1 Docs");
         });
 
         app.UseAuthorization();
@@ -94,7 +97,7 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapGet("/", async context =>
             {
-                await context.Response.WriteAsync("Welcome to running ASP.NET Core on AWS Lambda");
+                await context.Response.WriteAsync("Welcome to Fixx API Docs");
             });
         });
     }

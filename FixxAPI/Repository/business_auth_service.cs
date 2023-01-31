@@ -171,5 +171,43 @@ namespace FixxAPI.Repository
         {
             return await _context.users.ToListAsync();
         }
+
+        public async Task<users> update_forgot_password_token(string email, string token)
+        {
+            var bus = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            if (bus != null)
+            {
+                bus.forgot_password_token = token;
+                await _context.SaveChangesAsync();
+                return bus;
+            }
+            return null!;
+        }
+
+        public async Task<users> get_user_by_phone(string phone)
+        {
+            var user = await _context.users.FirstOrDefaultAsync(x => x.phone_number == phone);
+            return user!;
+        }
+
+        public async Task<users> get_user_by_token(string token)
+        {
+            var user = await _context.users.FirstOrDefaultAsync(x => x.forgot_password_token == token);
+            return user!;
+        }
+
+        public async Task<users> reset_password(reset_password_dto dto, byte[] hash, byte[] salt)
+        {
+            var bus = await _context.users.FirstOrDefaultAsync(x => x.forgot_password_token == dto.token);
+            if (bus != null)
+            {
+                bus.password_hash = hash;
+                bus.password_salt = salt;
+                bus.forgot_password_token = "";
+                await _context.SaveChangesAsync();
+                return bus;
+            }
+            return null!;
+        }
     }
 }

@@ -15,5 +15,9 @@ namespace FixxAPI.Repository
         public Task<users> save_user_business(user_add_dto dto);
         public Task<users> get_user_by_email(string email);
         public Task<IEnumerable<users>> get_all_users();
+        public Task<users> update_forgot_password_token(string email, string token);
+        public Task<users> get_user_by_phone(string phone);
+        public Task<users> get_user_by_token(string token);
+        public Task<users> reset_password(reset_password_dto dto, byte[] hash, byte[] salt);
     }
 }
