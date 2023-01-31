@@ -337,6 +337,21 @@ namespace FixxAPI.Repository
             }
             return null!;
         }
-        
+
+        public async Task<bool> delete_amenity()
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            var amenity = await _context.amenities.FirstOrDefaultAsync(x => x.user_id == user_id);
+            if (amenity != null)
+            {
+                _context.amenities.Remove(amenity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

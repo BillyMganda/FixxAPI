@@ -15,6 +15,7 @@ namespace FixxAPI.Repository
         public Task<List<S3Object>> GetImagesFromS3Bucket();
         public Task<amenities> get_amenities();
         public Task<amenities> add_ammenity(amenity_add_dto dto);
-        public Task<amenities> update_ammenity(amenity_add_dto dto);        
+        public Task<amenities> update_ammenity(amenity_add_dto dto);
+        public Task<bool> delete_amenity();
     }
 }

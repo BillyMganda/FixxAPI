@@ -76,7 +76,7 @@ namespace FixxAPI.Controllers
 
         [Authorize(Roles = "business")]
         [HttpDelete]
-        public async Task<IActionResult> Put_Property()
+        public async Task<IActionResult> Delete_Property()
         {
             try
             {
@@ -175,7 +175,47 @@ namespace FixxAPI.Controllers
                     return Unauthorized();
                 }
                 var ammenities = await _repository.add_ammenity(dto);
+                return Ok("amenities added succesfully");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
+
+        [Authorize(Roles = "business")]
+        [HttpPut("amenities")]
+        public async Task<IActionResult> Update_Amenity(amenity_add_dto dto)
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "business")
+                {
+                    return Unauthorized();
+                }
+                var ammenities = await _repository.update_ammenity(dto);
                 return Ok("amenities updated succesfully");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
+
+        [Authorize(Roles = "business")]
+        [HttpDelete("amenities")]
+        public async Task<IActionResult> Delete_Amenity()
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "business")
+                {
+                    return Unauthorized();
+                }
+                var ammenities = await _repository.delete_amenity();
+                return Ok("amenities deleted succesfully");
             }
             catch (Exception)
             {
