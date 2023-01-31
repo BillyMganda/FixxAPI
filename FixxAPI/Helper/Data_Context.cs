@@ -10,5 +10,6 @@ namespace FixxAPI.Helper
 
         }
         public DbSet<users> users { get; set; }
+        public DbSet<properties> properties { get; set; }
     }
 }

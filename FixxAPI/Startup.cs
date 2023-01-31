@@ -29,6 +29,7 @@ public class Startup
         services.AddHttpClient<ITwilioRestClient, TwilioRestClient>();
         services.AddDbContext<Data_Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
         services.AddScoped<Ibusiness_auth_service, business_auth_service>();
+        services.AddScoped<Iproperty_service, property_service>();
 
         //jwt
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
