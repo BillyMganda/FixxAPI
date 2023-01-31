@@ -56,6 +56,42 @@ namespace FixxAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "business")]
+        [HttpPut]
+        public async Task<IActionResult> Put_Property(property_update_dto request)
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "business")
+                    return Unauthorized();
+                await _repository.update_properties(request);
+                return Ok("property updated successfully");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
+
+        [Authorize(Roles = "business")]
+        [HttpDelete]
+        public async Task<IActionResult> Put_Property()
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "business")
+                    return Unauthorized();
+                await _repository.delete_properties();
+                return Ok("property deleted successfully");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
+
         [HttpPost("images")]
         [Authorize(Roles = "business")]
         public async Task<IActionResult> UploadImages(IFormFile[] files)
