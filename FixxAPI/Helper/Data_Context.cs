@@ -12,5 +12,7 @@ namespace FixxAPI.Helper
         public DbSet<users> users { get; set; }
         public DbSet<properties> properties { get; set; }
         public DbSet<amenities> amenities { get; set; }
+        public DbSet<property_category> property_category { get; set; }
+        public DbSet<property_type> property_type { get; set; }
     }
 }
