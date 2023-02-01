@@ -222,5 +222,25 @@ namespace FixxAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
             }
         }
+
+        [Authorize(Roles = "business")]
+        [HttpGet("all")]
+        public async Task<IActionResult> Get_AllInfo()
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "business")
+                {
+                    return Unauthorized();
+                }
+                var all = await _repository.get_all_info();
+                return Ok(all);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
     }
 }

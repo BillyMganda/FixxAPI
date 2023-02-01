@@ -353,5 +353,15 @@ namespace FixxAPI.Repository
             }
             return false;
         }
+
+        public async Task<prop_categ_type_amen> get_all_info()
+        {
+            string email = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Email);
+            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email);
+            Guid user_id = user!.uuid;
+
+            var allInfo = await _context.prop_categ_type_amen.FirstOrDefaultAsync(x => x.user_id == user_id);
+            return allInfo!;
+        }
     }
 }

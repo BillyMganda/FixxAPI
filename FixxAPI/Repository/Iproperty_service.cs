@@ -17,5 +17,6 @@ namespace FixxAPI.Repository
         public Task<amenities> add_ammenity(amenity_add_dto dto);
         public Task<amenities> update_ammenity(amenity_add_dto dto);
         public Task<bool> delete_amenity();
+        public Task<prop_categ_type_amen> get_all_info();
     }
 }
