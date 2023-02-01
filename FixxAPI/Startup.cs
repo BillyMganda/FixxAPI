@@ -31,6 +31,7 @@ public class Startup
         services.AddScoped<Ibusiness_auth_service, business_auth_service>();
         services.AddScoped<Iproperty_service, property_service>();
         services.AddScoped<Iadmin_auth_service, admin_auth_service>();
+        services.AddScoped<Iadmin_service, admin_service>();
 
         //jwt
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
