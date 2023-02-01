@@ -14,5 +14,6 @@ namespace FixxAPI.Helper
         public DbSet<amenities> amenities { get; set; }
         public DbSet<property_category> property_category { get; set; }
         public DbSet<property_type> property_type { get; set; }
+        public DbSet<prop_categ_type_amen> prop_categ_type_amen { get; set; }
     }
 }
