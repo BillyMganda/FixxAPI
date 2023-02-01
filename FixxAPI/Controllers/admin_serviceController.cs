@@ -118,5 +118,40 @@ namespace FixxAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
             }
         }
+
+        //prop_categ_type_amen
+        [HttpGet("property-all"), Authorize(Roles = "admin")]
+        public async Task<ActionResult> GetAll()
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "admin")
+                    return Unauthorized();
+                var results = await _repository.get_all_prop_categ_type_amen();                
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
+
+        [HttpGet("property-one"), Authorize(Roles = "admin")]
+        public async Task<ActionResult> GetOne(Guid id)
+        {
+            try
+            {
+                var role = _repository.get_logged_in_role();
+                if (role != "admin")
+                    return Unauthorized();
+                var results = await _repository.get_one_prop_categ_type_amen(id);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "internal server error");
+            }
+        }
     }
 }

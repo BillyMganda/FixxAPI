@@ -92,5 +92,16 @@ namespace FixxAPI.Repository
             }
             return false;
         }
+        //prop_categ_type_amen
+        public async Task<IEnumerable<prop_categ_type_amen>> get_all_prop_categ_type_amen()
+        {
+            return await _context.prop_categ_type_amen.ToListAsync();
+        }
+
+        public async Task<prop_categ_type_amen> get_one_prop_categ_type_amen(Guid userid)
+        {
+            var results = await _context.prop_categ_type_amen.FirstOrDefaultAsync(x => x.user_id == userid);
+            return results!;
+        }
     }
 }
