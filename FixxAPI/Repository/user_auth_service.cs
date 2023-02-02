@@ -90,9 +90,9 @@ namespace FixxAPI.Repository
             SmtpClient smtp = new SmtpClient();
             message.From = new MailAddress(email_from);
             message.To.Add(new MailAddress(email));
-            message.Subject = "Business Registration";
+            message.Subject = "Fixx247 Registration";
             message.IsBodyHtml = true;
-            message.Body = $"Dear <b>{fname}</b>, <br>Thank you for registering your business to Fixx.com.";
+            message.Body = $"Dear <b>{fname}</b>, <br>Your registration to Fixx247 was successful";
             smtp.Port = Convert.ToInt32(port);
             smtp.Host = smtp_server;
             smtp.EnableSsl = true;
