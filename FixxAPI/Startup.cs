@@ -33,6 +33,7 @@ public class Startup
         services.AddScoped<Iproperty_service, property_service>();
         services.AddScoped<Iadmin_auth_service, admin_auth_service>();
         services.AddScoped<Iadmin_service, admin_service>();
+        services.AddScoped<Iuser_auth_service, user_auth_service>();
 
         //jwt
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
